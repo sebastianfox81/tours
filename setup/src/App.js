@@ -9,11 +9,19 @@ function App() {
   const [ loading, setLoading ] = useState(true);
   const [ tours, setTours ] = useState([]);
 
-  const fetchTours = () => {
-    setLoading(true);
-    axios.get(url)
-    .then(res => console.log(res.data))
-    .catch(err => console.log(err))
+
+  const fetchTours = async () => {
+    setLoading(true)
+
+    try {
+      const res = await fetch(url);
+      const tours = await res.json()
+      setLoading(false);
+      setTours(tours)
+    } catch (err) {
+      setLoading(false);
+      console.log(err)
+    }
   }
 
   useEffect(() => {
@@ -30,7 +38,7 @@ function App() {
   }
   return (
     <main>
-      <Tours />
+      <Tours tours={tours} />
     </main>
   )
 }
